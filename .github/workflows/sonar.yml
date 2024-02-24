@@ -37,7 +37,7 @@ jobs:
         env:
           DOCKER_CLI_ACI: 1
   deploy:
-   needs: Build_scan_push
+   needs: build
    runs-on: sai
    steps:
       - name: docker pull image
