@@ -31,8 +31,8 @@ jobs:
         run: |
           # Run commands to build and push Docker images
           docker build -t tic-tac-toe .
-          docker tag tic-tac-toe sevenajay/tic-tac-toe:latest
+          docker tag tic-tac-toe spisey/tic-tac-toe:latest
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-          docker push sevenajay/tic-tac-toe:latest
+          docker push spisey/tic-tac-toe:latest
         env:
           DOCKER_CLI_ACI: 1
