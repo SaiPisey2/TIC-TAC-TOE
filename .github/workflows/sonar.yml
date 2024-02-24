@@ -36,32 +36,32 @@ jobs:
           docker push spisey/tic-tac-toe:latest
         env:
           DOCKER_CLI_ACI: 1
-  # deploy:
-  #  needs: Build_scan_push
-  #  runs-on: sai
-  #  steps:
-  #     - name: docker pull image
-  #       run: docker pull spisey/tic-tac-toe:latest
+  deploy:
+   needs: Build_scan_push
+   runs-on: sai
+   steps:
+      - name: docker pull image
+        run: docker pull spisey/tic-tac-toe:latest
 
-  #     - name: Image scan
-  #       run: trivy image spisey/tic-tac-toe:latest > trivyimagedeploy.txt  
+      - name: Image scan
+        run: trivy image spisey/tic-tac-toe:latest > trivyimagedeploy.txt  
   
-  #     # - name: Deploy to container
-  #     #   run: docker run -d --name game -p 3000:3000 spisey/tic-tac-toe:latest
+      # - name: Deploy to container
+      #   run: docker run -d --name game -p 3000:3000 spisey/tic-tac-toe:latest
 
-  #     - name: Update kubeconfig
-  #       run: aws eks --region us-east-1 update-kubeconfig --name EKS_CLOUD
+      - name: Update kubeconfig
+        run: aws eks --region us-east-1 update-kubeconfig --name EKS_CLOUD
 
-  #     - name: Deploy to kubernetes
-  #       run: kubectl apply -f deployment-service.yml
+      - name: Deploy to kubernetes
+        run: kubectl apply -f deployment-service.yml
   
-  #     - name: Send a Slack Notification
-  #       if: always()
-  #       uses: act10ns/slack@v1
-  #       with:
-  #         status: ${{ job.status }}
-  #         steps: ${{ toJson(steps) }}
-  #         channel: '#githubaction-eks'
-  #       env:
-  #         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Send a Slack Notification
+        if: always()
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#githubaction-eks'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   
