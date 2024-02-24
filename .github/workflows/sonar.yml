@@ -18,9 +18,21 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      # If you wish to fail your job when the Quality Gate is red, uncomment the
-      # following lines. This would typically be used to fail a deployment.
-      # - uses: sonarsource/sonarqube-quality-gate-action@master
-      #   timeout-minutes: 5
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          
+      - name: Install npm dependencies
+        run: npm install
+          
+      - name: Install Trivy
+        run: |
+          # Scanning files
+          trivy fs . > trivyfs.txt
+
+      - name: Docker build and push
+        run: |
+          # Run commands to build and push Docker images
+          docker build -t tic-tac-toe .
+          docker tag tic-tac-toe sevenajay/tic-tac-toe:latest
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push sevenajay/tic-tac-toe:latest
+        env:
+          DOCKER_CLI_ACI: 1
